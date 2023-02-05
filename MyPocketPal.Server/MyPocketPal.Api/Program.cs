@@ -1,6 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using MyPocketPal.Data.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<MyPocketPalDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MyPocketPalDb")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

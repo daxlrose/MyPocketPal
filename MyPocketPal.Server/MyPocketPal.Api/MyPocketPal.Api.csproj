@@ -17,10 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\MyPocketPal.Core\MyPocketPal.Core.csproj" />
     <ProjectReference Include="..\MyPocketPal.Data\MyPocketPal.Data.csproj" />
   </ItemGroup>
 

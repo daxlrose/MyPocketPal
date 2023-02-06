@@ -1,13 +1,12 @@
-﻿using MyPocketPal.Data.Models;
+﻿using MyPocketPal.Core.Dtos.Categories;
+using MyPocketPal.Data.Models;
 
 namespace MyPocketPal.Core.Interfaces
 {
     public interface ICategoryService
     {
-        Task<Category> AddCategoryAsync(Category category);
-        Task<Category> GetCategoryByIdAsync(int id);
-        Task<List<Category>> GetCategoriesAsync();
-        Task<Category> UpdateCategoryAsync(Category category);
-        Task DeleteCategoryAsync(Category category);
+        Task<CreatedCategoryWithIdDto> AddCategoryAsync(CreateCategoryDto categoryDto);
+        Task<SimpleCategoryDto> GetCategoryByIdAsync(int id);
+        Task<IEnumerable<SimpleCategoryDto>> GetCategoriesAsync();
     }
 }

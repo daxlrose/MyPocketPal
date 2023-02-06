@@ -24,6 +24,8 @@ namespace MyPocketPal.Api.Profiles
             .ForMember(dto => dto.Amount, opt => opt.MapFrom(src => src.Amount))
             .ForMember(dto => dto.Date, opt => opt.MapFrom(src => src.Date))
             .ForMember(dto => dto.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
+
+            CreateMap<UpdateExpenseDto, Expense>();
         }
     }
 }

@@ -8,7 +8,5 @@ namespace MyPocketPal.Core.Interfaces
         Task<CreatedExpenseWithCategoryNameAndIdDto> AddExpenseAsync(CreateExpenseDto expenseDto);
         Task<ExpenseWithCategoryNameDto> GetExpenseByIdAsync(int id);
         Task<IEnumerable<ExpenseWithCategoryNameDto>> GetExpensesAsync();
-        Task<Expense> UpdateExpenseAsync(Expense expense);
-        Task DeleteExpenseAsync(Expense expense);
     }
 }

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MyPocketPal.Core.Dtos.Categories;
 using MyPocketPal.Core.Interfaces;
 using MyPocketPal.Data.Models;
 
@@ -17,7 +17,7 @@ namespace MyPocketPal.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> GetCategoriesAsync()
+        public async Task<ActionResult<IEnumerable<SimpleCategoryDto>>> GetCategoriesAsync()
         {
             try
             {
@@ -31,7 +31,7 @@ namespace MyPocketPal.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategoryByIdAsync(int id)
+        public async Task<ActionResult<SimpleCategoryDto>> GetCategoryByIdAsync(int id)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace MyPocketPal.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> AddCategoryAsync(Category category)
+        public async Task<ActionResult<SimpleCategoryDto>> AddCategoryAsync(CreateCategoryDto categoryDto)
         {
             try
             {
@@ -59,52 +59,8 @@ namespace MyPocketPal.Api.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var addedCategory = await _categoryService.AddCategoryAsync(category);
+                var addedCategory = await _categoryService.AddCategoryAsync(categoryDto);
                 return CreatedAtAction(nameof(GetCategoryByIdAsync), new { id = addedCategory.Id }, addedCategory);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Category>> UpdateCategoryAsync(int id, Category category)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                var updatedCategory = await _categoryService.UpdateCategoryAsync(category);
-                if (updatedCategory == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(updatedCategory);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCategoryAsync(int id)
-        {
-            try
-            {
-                var category = await _categoryService.GetCategoryByIdAsync(id);
-                if (category == null)
-                {
-                    return NotFound();
-                }
-
-                await _categoryService.DeleteCategoryAsync(category);
-                return NoContent();
             }
             catch (Exception ex)
             {

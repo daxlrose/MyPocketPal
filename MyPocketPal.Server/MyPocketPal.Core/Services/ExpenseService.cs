@@ -61,51 +61,5 @@ namespace MyPocketPal.Core.Services
                 throw new Exception("Error retrieving expenses", ex);
             }
         }
-
-        public async Task<Expense> UpdateExpenseAsync(Expense expense)
-        {
-            if (expense == null)
-            {
-                throw new ArgumentNullException(nameof(expense));
-            }
-
-            if (!await _expenseRepository.ExpenseExistsAsync(expense.Id))
-            {
-                throw new ArgumentException("Expense does not exist.");
-            }
-
-            try
-            {
-                await _expenseRepository.UpdateExpenseAsync(expense);
-
-                return expense;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error updating expenses", ex);
-            }
-        }
-
-        public async Task DeleteExpenseAsync(Expense expense)
-        {
-            try
-            {
-                if (expense == null)
-                {
-                    throw new ArgumentNullException("Expense cannot be null.");
-                }
-
-                if (!await _expenseRepository.ExpenseExistsAsync(expense.Id))
-                {
-                    throw new Exception("Expense not found.");
-                }
-
-                await _expenseRepository.DeleteExpenseAsync(expense.Id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error deleting expenses", ex);
-            }
-        }
     }
 }

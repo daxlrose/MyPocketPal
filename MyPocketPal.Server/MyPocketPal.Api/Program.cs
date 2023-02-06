@@ -13,6 +13,7 @@ builder.Services.AddDbContext<MyPocketPalDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MyPocketPalDb")));
 
 builder.Services.AddAutoMapper(typeof(ExpenseProfile));
+builder.Services.AddAutoMapper(typeof(CategoryProfile));
 
 // Add services
 builder.Services.AddTransient<IExpenseService, ExpenseService>();

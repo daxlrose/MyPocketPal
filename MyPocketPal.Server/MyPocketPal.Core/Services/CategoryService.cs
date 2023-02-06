@@ -1,4 +1,8 @@
-﻿using MyPocketPal.Core.Interfaces;
+﻿using System.Collections.Generic;
+using System.Runtime.Intrinsics.Arm;
+using AutoMapper;
+using MyPocketPal.Core.Dtos.Categories;
+using MyPocketPal.Core.Interfaces;
 using MyPocketPal.Data.Models;
 using MyPocketPal.Data.Repositories.Interfaces;
 
@@ -7,23 +11,27 @@ namespace MyPocketPal.Core.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(ICategoryRepository categoryRepository,
+            IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Category> AddCategoryAsync(Category category)
+        public async Task<CreatedCategoryWithIdDto> AddCategoryAsync(CreateCategoryDto categoryDto)
         {
             try
             {
-                if (category == null)
+                if (categoryDto == null)
                 {
                     throw new ArgumentNullException("Category cannot be null.");
                 }
 
+                var category = _mapper.Map<Category>(categoryDto);
                 var result = await _categoryRepository.AddCategoryAsync(category);
-                return result;
+                return _mapper.Map<CreatedCategoryWithIdDto>(result);
             }
             catch (Exception ex)
             {
@@ -31,7 +39,7 @@ namespace MyPocketPal.Core.Services
             }
         }
 
-        public async Task<Category> GetCategoryByIdAsync(int id)
+        public async Task<SimpleCategoryDto> GetCategoryByIdAsync(int id)
         {
             try
             {
@@ -41,7 +49,7 @@ namespace MyPocketPal.Core.Services
                     throw new ArgumentException("Category not found.");
                 }
 
-                return result;
+                return _mapper.Map<SimpleCategoryDto>(result);
             }
             catch (Exception ex)
             {
@@ -49,62 +57,16 @@ namespace MyPocketPal.Core.Services
             }
         }
 
-        public async Task<List<Category>> GetCategoriesAsync()
+        public async Task<IEnumerable<SimpleCategoryDto>> GetCategoriesAsync()
         {
             try
             {
                 var result = await _categoryRepository.GetCategoriesAsync();
-                return result;
+                return _mapper.Map<IEnumerable<SimpleCategoryDto>>(result);
             }
             catch (Exception ex)
             {
                 throw new Exception("Error retrieving categories", ex);
-            }
-        }
-
-        public async Task<Category> UpdateCategoryAsync(Category category)
-        {
-            try
-            {
-                if (category == null)
-                {
-                    throw new ArgumentNullException("Category cannot be null.");
-                }
-
-                var categoryExists = await _categoryRepository.CategoryExistsAsync(category.Id);
-                if (!categoryExists)
-                {
-                    throw new ArgumentException("Category not found.");
-                }
-
-                await _categoryRepository.UpdateCategoryAsync(category);
-                return category;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error updating category", ex);
-            }
-        }
-
-        public async Task DeleteCategoryAsync(Category category)
-        {
-            try
-            {
-                if (category == null)
-                {
-                    throw new ArgumentNullException("Category cannot be null.");
-                }
-
-                if (!await _categoryRepository.CategoryExistsAsync(category.Id))
-                {
-                    throw new ArgumentException("Category not found.");
-                }
-
-                await _categoryRepository.DeleteCategoryAsync(category.Id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error deleting category", ex);
             }
         }
     }

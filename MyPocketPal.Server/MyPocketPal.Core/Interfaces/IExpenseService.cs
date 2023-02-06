@@ -1,12 +1,13 @@
-﻿using MyPocketPal.Data.Models;
+﻿using MyPocketPal.Core.Dtos.Expenses;
+using MyPocketPal.Data.Models;
 
 namespace MyPocketPal.Core.Interfaces
 {
     public interface IExpenseService
     {
-        Task<Expense> AddExpenseAsync(Expense expense);
-        Task<Expense> GetExpenseByIdAsync(int id);
-        Task<List<Expense>> GetExpensesAsync();
+        Task<CreatedExpenseWithCategoryNameAndIdDto> AddExpenseAsync(CreateExpenseDto expenseDto);
+        Task<ExpenseWithCategoryNameDto> GetExpenseByIdAsync(int id);
+        Task<IEnumerable<ExpenseWithCategoryNameDto>> GetExpensesAsync();
         Task<Expense> UpdateExpenseAsync(Expense expense);
         Task DeleteExpenseAsync(Expense expense);
     }

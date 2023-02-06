@@ -4,12 +4,15 @@ using MyPocketPal.Data.Repositories.Interfaces;
 using MyPocketPal.Data.Repositories;
 using MyPocketPal.Core.Interfaces;
 using MyPocketPal.Core.Services;
+using MyPocketPal.Api.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add Db Context
 builder.Services.AddDbContext<MyPocketPalDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MyPocketPalDb")));
+
+builder.Services.AddAutoMapper(typeof(ExpenseProfile));
 
 // Add services
 builder.Services.AddTransient<IExpenseService, ExpenseService>();

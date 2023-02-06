@@ -1,4 +1,6 @@
-﻿using MyPocketPal.Core.Interfaces;
+﻿using AutoMapper;
+using MyPocketPal.Core.Dtos.Expenses;
+using MyPocketPal.Core.Interfaces;
 using MyPocketPal.Data.Models;
 using MyPocketPal.Data.Repositories.Interfaces;
 
@@ -7,25 +9,26 @@ namespace MyPocketPal.Core.Services
     public class ExpenseService : IExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
 
-        public ExpenseService(IExpenseRepository expenseRepository, ICategoryRepository categoryRepository)
+        public ExpenseService(IExpenseRepository expenseRepository, IMapper mapper)
         {
             _expenseRepository = expenseRepository;
-            _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Expense> AddExpenseAsync(Expense expense)
+        public async Task<CreatedExpenseWithCategoryNameAndIdDto> AddExpenseAsync(CreateExpenseDto expenseDto)
         {
-            if (expense == null)
+            if (expenseDto == null)
             {
-                throw new ArgumentNullException(nameof(expense));
+                throw new ArgumentNullException(nameof(expenseDto));
             }
 
             try
             {
+                var expense = _mapper.Map<Expense>(expenseDto);
                 var addedExpense = await _expenseRepository.AddExpenseAsync(expense);
-                return addedExpense;
+                return _mapper.Map<CreatedExpenseWithCategoryNameAndIdDto>(addedExpense);
             }
             catch (Exception ex)
             {
@@ -33,12 +36,12 @@ namespace MyPocketPal.Core.Services
             }
         }
 
-        public async Task<Expense> GetExpenseByIdAsync(int id)
+        public async Task<ExpenseWithCategoryNameDto> GetExpenseByIdAsync(int id)
         {
             try
             {
                 var expense = await _expenseRepository.GetExpenseAsync(id);
-                return expense;
+                return _mapper.Map<ExpenseWithCategoryNameDto>(expense);
             }
             catch (Exception ex)
             {
@@ -46,12 +49,12 @@ namespace MyPocketPal.Core.Services
             }
         }
 
-        public async Task<List<Expense>> GetExpensesAsync()
+        public async Task<IEnumerable<ExpenseWithCategoryNameDto>> GetExpensesAsync()
         {
             try
             {
                 var expenses = await _expenseRepository.GetExpensesAsync();
-                return expenses;
+                return _mapper.Map<IEnumerable<ExpenseWithCategoryNameDto>>(expenses);
             }
             catch (Exception ex)
             {

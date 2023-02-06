@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyPocketPal.Core.Dtos.Expenses;
 using MyPocketPal.Core.Interfaces;
 using MyPocketPal.Data.Models;
 
@@ -17,7 +18,7 @@ namespace MyPocketPal.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Expense>>> GetExpenses()
+        public async Task<ActionResult<IEnumerable<ExpenseWithCategoryNameDto>>> GetExpenses()
         {
             var expenses = await _expenseService.GetExpensesAsync();
 
@@ -25,7 +26,7 @@ namespace MyPocketPal.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Expense>> GetExpenseById(int id)
+        public async Task<ActionResult<ExpenseWithCategoryNameDto>> GetExpenseById(int id)
         {
             var expense = await _expenseService.GetExpenseByIdAsync(id);
 
@@ -38,14 +39,14 @@ namespace MyPocketPal.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Expense>> AddExpense(Expense expense)
+        public async Task<ActionResult<ExpenseWithCategoryNameDto>> AddExpense(CreateExpenseDto expenseDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var addedExpense = await _expenseService.AddExpenseAsync(expense);
+            var addedExpense = await _expenseService.AddExpenseAsync(expenseDto);
 
             return CreatedAtAction(nameof(GetExpenseById), new { id = addedExpense.Id }, addedExpense);
         }
@@ -73,19 +74,19 @@ namespace MyPocketPal.Api.Controllers
             return Ok(updatedExpense);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Expense>> DeleteExpense(int id)
-        {
-            var expense = await _expenseService.GetExpenseByIdAsync(id);
-
-            if (expense == null)
-            {
-                return NotFound();
-            }
-
-            await _expenseService.DeleteExpenseAsync(expense);
-
-            return Ok(expense);
-        }
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<Expense>> DeleteExpense(int id)
+        //{
+        //    var expense = await _expenseService.GetExpenseByIdAsync(id);
+        //
+        //    if (expense == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //
+        //    await _expenseService.DeleteExpenseAsync(expense);
+        //
+        //    return Ok(expense);
+        //}
     }
 }

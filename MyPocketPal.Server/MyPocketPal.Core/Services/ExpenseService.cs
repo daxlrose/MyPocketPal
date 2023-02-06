@@ -22,18 +22,6 @@ namespace MyPocketPal.Core.Services
                 throw new ArgumentNullException(nameof(expense));
             }
 
-            var existingCategory = await _categoryRepository.CategoryExistsAsync(expense.CategoryId);
-            if (!existingCategory)
-            {
-                throw new KeyNotFoundException("The specified category does not exist");
-            }
-
-            var existingExpense = await _expenseRepository.ExpenseExistsAsync(expense.Id);
-            if (existingExpense)
-            {
-                throw new InvalidOperationException("Expense already exists");
-            }
-
             try
             {
                 var addedExpense = await _expenseRepository.AddExpenseAsync(expense);
@@ -78,8 +66,7 @@ namespace MyPocketPal.Core.Services
                 throw new ArgumentNullException(nameof(expense));
             }
 
-            var existingExpense = await _expenseRepository.GetExpenseAsync(expense.Id);
-            if (existingExpense == null)
+            if (!await _expenseRepository.ExpenseExistsAsync(expense.Id))
             {
                 throw new ArgumentException("Expense does not exist.");
             }
@@ -92,7 +79,7 @@ namespace MyPocketPal.Core.Services
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error updating expenses", ex);
             }
         }
 
@@ -105,11 +92,6 @@ namespace MyPocketPal.Core.Services
                     throw new ArgumentNullException("Expense cannot be null.");
                 }
 
-                if (expense.Id <= 0)
-                {
-                    throw new ArgumentException("Invalid expense Id.");
-                }
-
                 if (!await _expenseRepository.ExpenseExistsAsync(expense.Id))
                 {
                     throw new Exception("Expense not found.");
@@ -119,7 +101,7 @@ namespace MyPocketPal.Core.Services
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error deleting expenses", ex);
             }
         }
     }

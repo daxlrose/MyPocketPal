@@ -27,8 +27,7 @@ namespace MyPocketPal.Core.Services
             }
             catch (Exception ex)
             {
-                // Log the exception.
-                throw ex;
+                throw new Exception("Error adding category", ex);
             }
         }
 
@@ -46,8 +45,7 @@ namespace MyPocketPal.Core.Services
             }
             catch (Exception ex)
             {
-                // Log the exception.
-                throw ex;
+                throw new Exception("Error retrieving category", ex);
             }
         }
 
@@ -60,8 +58,7 @@ namespace MyPocketPal.Core.Services
             }
             catch (Exception ex)
             {
-                // Log the exception.
-                throw ex;
+                throw new Exception("Error retrieving categories", ex);
             }
         }
 
@@ -85,8 +82,7 @@ namespace MyPocketPal.Core.Services
             }
             catch (Exception ex)
             {
-                // Log the exception.
-                throw ex;
+                throw new Exception("Error updating category", ex);
             }
         }
 
@@ -108,8 +104,7 @@ namespace MyPocketPal.Core.Services
             }
             catch (Exception ex)
             {
-                // Log the exception.
-                throw ex;
+                throw new Exception("Error deleting category", ex);
             }
         }
     }
